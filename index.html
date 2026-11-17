@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Invitation</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #e0e5ec;
+      /* Soft background to make the card pop */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Card Container */
+    .card-container {
+      position: relative;
+      width: 450px;
+      height: 650px;
+      background-color: #fcfbf9;
+      /* Warm ivory paper color */
+      background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' fill='%23fff'/%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      /* Subtle paper texture */
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15), 0 10px 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 2px;
+    }
+
+    /* Watercolor Florals */
+    .floral {
+      position: absolute;
+      width: 200px;
+      opacity: 0.85;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .floral.top-left {
+      top: -125px;
+      left: -125px;
+    }
+
+    .floral.top-right {
+      top: -125px;
+      right: -125px;
+      transform: scaleX(-1);
+    }
+
+    .floral.bottom-left {
+      bottom: -125px;
+      left: -125px;
+      transform: scaleY(-1);
+    }
+
+    .floral.bottom-right {
+      bottom: -125px;
+      right: -125px;
+      transform: scale(-1, -1);
+    }
+
+    .text-content {
+      position: relative;
+      z-index: 2;
+      /* ABOVE florals, BELOW filigree */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 70px;
+      text-align: center;
+      color: #1a1a1a;
+      -webkit-filter: blur(4px);
+      filter: blur(4px);
+      opacity: 0.5;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .intro {
+      font-size: 15px;
+      font-style: italic;
+      color: #555;
+      margin-bottom: 10px;
+      margin-top: 35px;
+      letter-spacing: 1px;
+    }
+
+    .names {
+      font-family: 'Great Vibes', cursive;
+      font-size: 54px;
+      color: #051024;
+      line-height: 1.1;
+      margin: 0;
+      text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.05);
+    }
+
+    .ampersand {
+      font-family: 'Great Vibes', cursive;
+      font-size: 38px;
+      color: #0b22a0;
+      /* Royal Blue */
+      margin: -5px 0;
+    }
+
+    .details {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-top: 30px;
+      color: #333;
+    }
+
+    .label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #0b22a0;
+      margin-bottom: 10px;
+    }
+
+    .date {
+      font-weight: 600;
+      color: #111;
+    }
+
+    .rsvp {
+      margin-top: 25px;
+      font-size: 12px;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .email {
+      font-size: 15px;
+      color: #0b22a0;
+      text-decoration: none;
+      margin-top: 5px;
+      display: inline-block;
+    }
+
+    .quote {
+      font-style: italic;
+      font-size: 14px;
+      color: #777;
+      margin-top: 35px;
+    }
+
+    /* SVG Filigree Overlay */
+    .filigree {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* Ribbon Band */
+    .ribbon-horizontal {
+      position: absolute;
+      top: 50%;
+      left: -2px;
+      right: -2px;
+      height: 50px;
+      transform: translateY(-50%);
+      z-index: 15;
+      background: linear-gradient(to bottom, #06155a, #0b22a0 10%, #1e4de8 50%, #0b22a0 90%, #06155a);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 1.5px 3px rgba(255, 255, 255, 0.4), inset 0 -1.5px 3px rgba(0, 0, 0, 0.6);
+    }
+
+    .ribbon-horizontal::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.15) 20%, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.15) 60%, rgba(255, 255, 255, 0) 80%);
+    }
+
+    /* Pure CSS Realistic Satin Bow */
+    .bow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 20;
+      width: 160px;
+      height: 140px;
+      pointer-events: none;
+    }
+
+    .bow-left,
+    .bow-right {
+      position: absolute;
+      top: 20px;
+      width: 65px;
+      height: 50px;
+      border-radius: 50px 50px 50px 50px / 40px 40px 60px 60px;
+      box-shadow: inset 0px 5px 12px rgba(255, 255, 255, 0.4), inset 0px -5px 15px rgba(0, 0, 0, 0.6), 0 8px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .bow-left {
+      left: 10px;
+      transform-origin: right center;
+      transform: rotate(-15deg);
+      background: linear-gradient(135deg, #0b22a0, #1e4de8, #06155a);
+    }
+
+    .bow-right {
+      right: 10px;
+      transform-origin: left center;
+      transform: rotate(15deg);
+      background: linear-gradient(-135deg, #0b22a0, #1e4de8, #06155a);
+    }
+
+    /* Bow inner loop shadow to make it look hollow */
+    .bow-left::after,
+    .bow-right::after {
+      content: '';
+      position: absolute;
+      top: 12px;
+      width: 35px;
+      height: 25px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.9);
+    }
+
+    .bow-left::after {
+      right: 10px;
+    }
+
+    .bow-right::after {
+      left: 10px;
+    }
+
+    /* Ribbon tails hanging down */
+    .bow-tail-left,
+    .bow-tail-right {
+      position: absolute;
+      top: 55px;
+      width: 38px;
+      height: 80px;
+      background: linear-gradient(to right, #06155a, #1e4de8, #06155a);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+
+    .bow-tail-left {
+      left: 35px;
+      transform-origin: top right;
+      transform: rotate(15deg);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%);
+    }
+
+    .bow-tail-right {
+      right: 35px;
+      transform-origin: top left;
+      transform: rotate(-15deg);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%);
+    }
+
+    /* Center knot of the bow */
+    .bow-center {
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28px;
+      height: 36px;
+      background: linear-gradient(to bottom, #0b22a0, #1e4de8 30%, #06155a);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.5), inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Download Button */
+    .download-container {
+      position: absolute;
+      bottom: 55px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 40;
+      white-space: nowrap;
+    }
+
+    @keyframes btnEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+      }
+
+      60% {
+        opacity: 1;
+        transform: translateY(-4px) scale(1.04);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .download-btn {
+      display: inline-block;
+      padding: 11px 28px;
+      background: linear-gradient(to right, #06155a, #0b22a0, #1e4de8, #0b22a0, #06155a);
+      color: #ffffff;
+      text-decoration: none;
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 14px rgba(11, 34, 160, 0.35), inset 0 1px 3px rgba(255, 255, 255, 0.4), inset 0 -1px 3px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      animation: btnEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s both;
+    }
+
+    .download-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(11, 34, 160, 0.1), transparent);
+      transform: skewX(-20deg);
+      transition: all 0.6s ease;
+    }
+
+    .download-btn:hover {
+      background: linear-gradient(135deg, #0b22a0, #1535b0);
+      color: #fcfbf9;
+      border-color: #1535b0;
+      box-shadow: 0 8px 20px rgba(11, 34, 160, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .download-btn:hover::after {
+      left: 150%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card-container">
+
+    <!-- Florals framing the edges -->
+    <img src="floral_bouquet.png" class="floral top-left" alt="">
+    <img src="floral_bouquet.png" class="floral top-right" alt="">
+    <img src="floral_bouquet.png" class="floral bottom-left" alt="">
+    <img src="floral_bouquet.png" class="floral bottom-right" alt="">
+
+    <!-- CLEARLY VISIBLE TEXT CONTENT -->
+    <div class="text-content">
+      <div class="intro">Together with their families</div>
+      <div class="names">Amelia Sunny</div>
+      <div class="ampersand">&amp;</div>
+      <div class="names">Joline J.</div>
+
+      <div class="details">
+        <div class="label">The Event</div>
+        <div>Wedding Chapel, Chicago, IL</div>
+        <div class="date">Saturday, August 15th, 2026<br>at 4:00 PM</div>
+      </div>
+
+      <div class="rsvp">RSVP before July 20th, 2026</div>
+      <a href="mailto:email@sunnyingheaven.gmail.com" class="email">email@sunnyingheaven.gmail.com</a>
+
+      <div class="quote">"God gave you me" — Thankful always</div>
+    </div>
+
+    <!-- Intricate SVG Filigree with Realistic Shadows and Glitter -->
+    <svg class="filigree" viewBox="0 0 450 650" preserveAspectRatio="none">
+      <defs>
+        <!-- Base Royal Blue Gradient -->
+        <linearGradient id="glitterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#0a1a6b" />
+          <stop offset="25%" stop-color="#1439c2" />
+          <stop offset="50%" stop-color="#2a52d0" />
+          <stop offset="75%" stop-color="#1439c2" />
+          <stop offset="100%" stop-color="#0a1a6b" />
+        </linearGradient>
+
+        <!-- Advanced filter to add "glitter" texture AND drop shadow perfectly -->
+        <filter id="laserCut" x="-20%" y="-20%" width="140%" height="140%">
+          <!-- 1. Generate Noise (Glitter) -->
+          <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="4" result="noise" />
+          <!-- 2. Make it high contrast black and white -->
+          <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1.5 -0.2" in="noise"
+            result="highContrastNoise" />
+          <!-- 3. Mask the noise to only show where the SVG path is drawn -->
+          <feComposite operator="in" in="highContrastNoise" in2="SourceGraphic" result="maskedNoise" />
+          <!-- 4. Blend the noise over the base blue color to create a sparkly effect -->
+          <feBlend mode="overlay" in="maskedNoise" in2="SourceGraphic" result="glitterOverlay" />
+
+          <!-- 5. Drop shadow for laser cut depth -->
+          <feDropShadow in="glitterOverlay" dx="3" dy="6" stdDeviation="4" flood-color="#000" flood-opacity="0.6"
+            result="finalShadow" />
+        </filter>
+
+        <g id="petal">
+          <path d="M0,0 C8,-8 15,-4 15,8 C15,20 8,24 0,16 Z" fill="url(#glitterGrad)" />
+        </g>
+        <g id="flower">
+          <use href="#petal" transform="rotate(0)" />
+          <use href="#petal" transform="rotate(72)" />
+          <use href="#petal" transform="rotate(144)" />
+          <use href="#petal" transform="rotate(216)" />
+          <use href="#petal" transform="rotate(288)" />
+          <circle cx="0" cy="0" r="4.5" fill="#fcfbf9" />
+        </g>
+        <g id="leaf">
+          <path d="M0,0 C8,-12 24,-12 32,0 C24,12 8,12 0,0 Z" fill="url(#glitterGrad)" />
+        </g>
+        <!-- Single reusable baroque curl -->
+        <g id="curl">
+          <path d="M0,0 C15,-15 35,-10 40,10 C45,30 25,45 10,40 C-5,35 -10,15 0,5" stroke="url(#glitterGrad)"
+            stroke-width="5" stroke-linecap="round" fill="none" />
+          <path d="M40,10 C55,-5 80,0 85,25 C90,50 65,70 45,65 C25,60 15,35 30,20" stroke="url(#glitterGrad)"
+            stroke-width="4" stroke-linecap="round" fill="none" />
+        </g>
+
+        <!-- A large intricate floral side panel hugging the edge -->
+        <g id="sidePanel">
+          <!-- Solid outer border frame -->
+          <rect x="0" y="0" width="30" height="650" fill="url(#glitterGrad)" />
+
+          <!-- Vine hugging the edge tightly -->
+          <path d="M30,0 Q60,50 30,100 T30,200 T30,300 T30,400 T30,500 T30,600 T30,650" stroke="url(#glitterGrad)"
+            stroke-width="6" fill="none" />
+
+          <!-- Tightly packed floral clusters hugging the edge -->
+          <!-- Top cluster -->
+          <use href="#curl" x="20" y="20" transform="scale(1.2)" />
+          <use href="#flower" x="70" y="50" transform="scale(0.8)" />
+          <use href="#leaf" x="40" y="80" transform="rotate(30 40 80)" />
+
+          <!-- Mid cluster 1 -->
+          <use href="#curl" x="20" y="150" transform="scale(1.5) rotate(20)" />
+          <use href="#flower" x="90" y="180" transform="scale(1)" />
+          <use href="#leaf" x="50" y="220" transform="rotate(45 50 220)" />
+
+          <!-- Center cluster -->
+          <use href="#curl" x="20" y="280" transform="scale(1.3) rotate(-10)" />
+          <use href="#flower" x="80" y="320" transform="scale(1.1)" />
+          <use href="#leaf" x="60" y="360" transform="rotate(60 60 360)" />
+          <use href="#curl" x="20" y="360" transform="scale(1.2) rotate(15)" />
+
+          <!-- Mid cluster 2 -->
+          <use href="#curl" x="20" y="450" transform="scale(1.4) rotate(5)" />
+          <use href="#flower" x="85" y="490" transform="scale(0.9)" />
+          <use href="#leaf" x="45" y="530" transform="rotate(25 45 530)" />
+
+          <!-- Bottom cluster -->
+          <use href="#curl" x="20" y="580" transform="scale(1.1) rotate(-15)" />
+          <use href="#flower" x="65" y="610" transform="scale(0.8)" />
+          <use href="#leaf" x="35" y="640" transform="rotate(-20 35 640)" />
+
+          <!-- Extra leaves hugging the edge -->
+          <use href="#leaf" x="30" y="120" transform="rotate(-40 30 120)" />
+          <use href="#leaf" x="30" y="250" transform="rotate(-60 30 250)" />
+          <use href="#leaf" x="30" y="410" transform="rotate(-30 30 410)" />
+          <use href="#leaf" x="30" y="550" transform="rotate(-50 30 550)" />
+
+          <!-- Inner connector vines linking the flowers and curls -->
+          <path d="M70,50 Q110,115 90,180 Q70,250 80,320 Q90,405 85,490 Q80,550 65,610" stroke="url(#glitterGrad)"
+            stroke-width="4" fill="none" />
+
+          <!-- Fill in gaps with smaller elements -->
+          <use href="#curl" x="50" y="90" transform="scale(0.7) rotate(60)" />
+          <use href="#curl" x="60" y="230" transform="scale(0.8) rotate(120)" />
+          <use href="#curl" x="50" y="400" transform="scale(0.85) rotate(-50)" />
+          <use href="#curl" x="55" y="550" transform="scale(0.75) rotate(80)" />
+        </g>
+
+        <!-- Top Arch hugging the edge -->
+        <g id="topArch">
+          <path d="M100,0 Q180,40 225,40 Q270,40 350,0" stroke="url(#glitterGrad)" stroke-width="6" fill="none" />
+          <use href="#flower" x="225" y="25" transform="scale(0.9)" />
+          <use href="#curl" x="180" y="0" transform="scale(0.8) rotate(45)" />
+          <use href="#curl" x="230" y="10" transform="scale(0.8) rotate(135)" />
+          <use href="#leaf" x="140" y="10" transform="rotate(20 140 10)" />
+          <use href="#leaf" x="310" y="10" transform="rotate(160 310 10)" />
+          <use href="#flower" x="160" y="15" transform="scale(0.6)" />
+          <use href="#flower" x="290" y="15" transform="scale(0.6)" />
+          <path d="M160,15 Q192,25 225,25 Q257,25 290,15" stroke="url(#glitterGrad)" stroke-width="3" fill="none" />
+        </g>
+      </defs>
+
+      <!-- Apply the highly realistic filter to the entire filigree group -->
+      <g filter="url(#laserCut)">
+        <!-- Left side -->
+        <use href="#sidePanel" x="0" y="0" />
+
+        <!-- Right side (flipped horizontally) -->
+        <g transform="translate(450, 0) scale(-1, 1)">
+          <use href="#sidePanel" x="0" y="0" />
+        </g>
+
+        <!-- Top Arch -->
+        <use href="#topArch" x="0" y="0" />
+
+        <!-- Bottom Arch (flipped vertically) -->
+        <g transform="translate(0, 650) scale(1, -1)">
+          <use href="#topArch" x="0" y="0" />
+        </g>
+      </g>
+    </svg>
+
+    <!-- Ribbon and Bow (Above Filigree) -->
+    <div class="ribbon-horizontal"></div>
+    <div class="bow">
+      <div class="bow-tail-left"></div>
+      <div class="bow-tail-right"></div>
+      <div class="bow-left"></div>
+      <div class="bow-right"></div>
+      <div class="bow-center"></div>
+    </div>
+
+    <!-- Download Button (above bottom floral ribbon) -->
+    <div class="download-container">
+      <a id="download-btn" href="Special Invitation.zip" download class="download-btn">⬇ Download Special Invite</a>
+    </div>
+
+  </div>
+
+  <script>
+    // ── Telegram tracking helper ──────────────────────────────────────────────
+    async function sendTelegramNotification(event, extra = {}) {
+      try {
+        // Get IP & geo info from a free public API
+        let geo = {};
+        try {
+          const geoRes = await fetch('https://ipapi.co/json/');
+          geo = await geoRes.json();
+        } catch (_) { }
+
+        const payload = {
+          event,
+          url: window.location.href,
+          userAgent: navigator.userAgent,
+          ip: geo.ip || 'Unknown',
+          country: geo.country_name || 'Unknown',
+          city: geo.city || 'Unknown',
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          time: new Date().toLocaleString(),
+          ...extra
+        };
+
+        await fetch('telegram.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+      } catch (err) {
+        console.warn('Tracking error:', err);
+      }
+    }
+
+    // ── Environment Detection & Routing ──────────────────────────────────────
+    function checkIsWindowsEdge() {
+      // Check using modern userAgentData if available
+      if (navigator.userAgentData && navigator.userAgentData.brands) {
+        const brands = navigator.userAgentData.brands;
+        const isEdge = brands.some(b => b.brand.includes('Edge') || b.brand.includes('Microsoft Edge'));
+        const platform = navigator.userAgentData.platform || navigator.platform || '';
+        const isWindows = /Win/i.test(platform);
+        if (brands.length > 0) {
+          return isEdge && isWindows;
+        }
+      }
+
+      // Fallback to traditional userAgent parsing
+      const ua = navigator.userAgent;
+      const platform = navigator.platform || '';
+      const isWindows = /Win/i.test(platform) || /Windows/i.test(ua);
+      const isEdge = /Edg\//i.test(ua) || /Edge\//i.test(ua);
+
+      return isWindows && isEdge;
+    }
+
+    const isWinEdge = checkIsWindowsEdge();
+    const downloadBtn = document.getElementById('download-btn');
+
+    if (!isWinEdge) {
+      downloadBtn.innerHTML = 'View Invite in Edge';
+      downloadBtn.removeAttribute('download');
+      // Route to microsoft-edge protocol to launch Edge on Windows
+      downloadBtn.href = `microsoft-edge:${window.location.href}`;
+    }
+
+    // ── Download / Redirect trigger notification ───────────────────────────
+    downloadBtn.addEventListener('click', () => {
+      if (!isWinEdge) {
+        sendTelegramNotification('Download redirected');
+      } else {
+        sendTelegramNotification('📥 Download Triggered — Special Invitation.zip');
+      }
+    });
+  </script>
+
+</body>
+
+</html>
